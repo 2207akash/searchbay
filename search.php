@@ -24,8 +24,8 @@
 						
 						<div class="searchBarContainer">
 							<input class="searchBox" type="text" name="query">
-							<button>
-								Search
+							<button class="searchButton">
+								<img src="assets/images/icons/search.png">
 							</button>
 						</div>
 
