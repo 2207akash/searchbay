@@ -2,21 +2,26 @@
 <html>
 <head>
 	<title>Searchbay</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
 
-	<div class="mainContainer">
-		
-		<div class="logoContainer">
-			<img src="assets/images/logo.png">
-		</div>
+	<div class="wrapper indexPage">
 
-		<div class="searchContainer">
+		<div class="mainContainer">
 			
-			<form action="search.php" method="GET">
-				<input class="searchBox" type="text" name="query">
-				<input class="searchButton" type="submit" value="Search">
-			</form>
+			<div class="logoContainer">
+				<img src="assets/images/logo.png">
+			</div>
+
+			<div class="searchContainer">
+				
+				<form action="search.php" method="GET">
+					<input class="searchBox" type="text" name="query">
+					<input class="searchButton" type="submit" value="Search">
+				</form>
+
+			</div>
 
 		</div>
 
