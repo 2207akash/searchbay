@@ -1,8 +1,12 @@
 <?php 
-	if(isset($_GET["query"]))
+	if(isset($_GET["query"])) {
 		$query = $_GET["query"];
-	else
+	}
+	else {
 		exit("Empty search");
+	}
+
+	$type = isset($_GET["type"]) ? $_GET["type"] : "web";
 ?>
 
 <!DOCTYPE html>
@@ -45,10 +49,10 @@
 			<div class="tabsContainer">
 					
 				<ul class="tabList">
-					<li>
+					<li class="<?php echo $type == 'web' ? 'active' : '' ?>">
 						<a href='<?php echo "search.php?query=$query&type=web"; ?>'>Web</a>
 					</li>
-					<li>
+					<li class="<?php echo $type == 'images' ? 'active' : '' ?>">
 						<a href='<?php echo "search.php?query=$query&type=images"; ?>'>Images</a>
 					</li>
 				</ul>
