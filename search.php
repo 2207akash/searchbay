@@ -1,3 +1,10 @@
+<?php 
+	if(isset($_GET["query"]))
+		$query = $_GET["query"];
+	else
+		exit("Empty search");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +39,19 @@
 					</form>
 
 				</div>
+
+			</div>
+
+			<div class="tabsContainer">
+					
+				<ul class="tabList">
+					<li>
+						<a href='<?php echo "search.php?query=$query&type=web"; ?>'>Web</a>
+					</li>
+					<li>
+						<a href='<?php echo "search.php?query=$query&type=images"; ?>'>Images</a>
+					</li>
+				</ul>
 
 			</div>
 
