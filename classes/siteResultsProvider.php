@@ -21,6 +21,26 @@ class SiteResultsProvider {
 
 	}
 
+	public function getResultsHTML($page, $pageSize, $query) {
+
+		$q = $this->con->prepare("SELECT * FROM sites WHERE title LIKE :query OR url LIKE :query OR keywords LIKE :query OR description LIKE :query ORDER BY clicks DESC");
+
+		$searchTerm = "%" . $query . "%";
+		$q->bindParam(":query", $searchTerm);
+		$q->execute();
+
+		$resultsHTML = "<div class='siteResults'>";
+
+		while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+			$title = $row["title"];
+			$resultsHTML .= "$title <br>";
+		}
+
+		$resultsHTML .= "</div>";
+
+		return $resultsHTML;
+	}
+
 }
 
 ?>

@@ -68,8 +68,11 @@
 			<?php 
 
 				$resultsProvider = new siteResultsProvider($con);
-				echo $resultsProvider->getNumResults($query);
+				$numResults = $resultsProvider->getNumResults($query);
 
+				echo "<p class='resultsCount'>$numResults results found</p>";
+
+				echo $resultsProvider->getResultsHTML(1, 20, $query);
 			?>
 		</div>
 
