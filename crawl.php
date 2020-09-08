@@ -4,17 +4,43 @@ include("classes/DOMDocumentParser.php");
 
 $alreadyCrawled = array();
 $crawling = array();
+$alreadyFoundImages = array();
+
+function linkExists($url) {
+	global $con;
+
+	$query = $con->prepare("SELECT * FROM sites WHERE url=:url");
+
+	$query->bindParam(":url", $url);
+	$query->execute();
+
+	return $query->rowCount() != 0;
+}
 
 function insertLink($url, $title, $description, $keywords) {
 	global $con;
 
 	$query = $con->prepare("INSERT INTO sites(url, title, description, keywords)
-							VALUES(:url, :title, :description, :keywords)")
+							VALUES(:url, :title, :description, :keywords)");
 
 	$query->bindParam(":url", $url);
 	$query->bindParam(":title", $title);
 	$query->bindParam(":description", $description);
 	$query->bindParam(":keywords", $keywords);
+
+	return $query->execute();
+}
+
+function insertImage($url, $src, $alt, $title) {
+	global $con;
+
+	$query = $con->prepare("INSERT INTO images(siteURL, imageURL, alt, title)
+							VALUES(:siteURL, :imageURL, :alt, :title)");
+
+	$query->bindParam(":siteURL", $url);
+	$query->bindParam(":imageURL", $src);
+	$query->bindParam(":alt", $alt);
+	$query->bindParam(":title", $title);
 
 	return $query->execute();
 }
@@ -44,6 +70,8 @@ function createLink($src, $url) {
 }
 
 function getDetails($url) {
+
+	global $alreadyFoundImages;
 	
 	$parser = new DomDocumentParser($url);
 
@@ -78,7 +106,34 @@ function getDetails($url) {
 	$description = str_replace("\n", "", $description);
 	$keywords = str_replace("\n", "", $keywords);
 
-	insertLink($url, $title, $description, $keywords);
+	if(linkExists($url)) {
+		echo "$url already exists<br>";
+	}
+	else if(insertLink($url, $title, $description, $keywords)) {
+		echo "SUCCESS: $url<br>";
+	}
+	else {
+		echo "ERROR: Failed to insert $url<br>";
+	}
+
+	$imageArray = $parser->getImages();
+	foreach($imageArray as $image) {
+		$src = $image->getAttribute("src");
+		$alt = $image->getAttribute("alt");
+		$title = $image->getAttribute("title");
+
+		if(!$title && !$alt) {
+			continue;
+		}
+
+		$src = createLink($src, $url);
+
+		if(!in_array($src, $alreadyFoundImages)) {
+			$alreadyFoundImages[] = $src;
+
+			insertImage($url, $src, $alt, $title);
+		}
+	}
 
 }
 

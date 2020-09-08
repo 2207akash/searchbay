@@ -11,7 +11,7 @@
 		<div class="mainContainer">
 			
 			<div class="logoContainer">
-				<img src="assets/images/logo.png">
+				<img src="assets/images/logo.png" alt="searchBay">
 			</div>
 
 			<div class="searchContainer">
