@@ -176,7 +176,7 @@ function followLinks($url) {
 	}
 }
 
-$startURL = "https://google.com";
+$startURL = "https://www.spotify.com/";
 followLinks($startURL);
 
 ?>
