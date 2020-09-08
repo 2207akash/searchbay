@@ -165,8 +165,6 @@ function followLinks($url) {
 			// Insert $href to DB
 			getDetails($href);
 		}
-		else
-			return;
 
 		echo $href . "<br>";
 	}
@@ -178,7 +176,7 @@ function followLinks($url) {
 	}
 }
 
-$startURL = "http://www.google.com";
+$startURL = "https://google.com";
 followLinks($startURL);
 
 ?>
