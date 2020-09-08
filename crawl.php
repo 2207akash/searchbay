@@ -28,6 +28,43 @@ function createLink($src, $url) {
 	return $src;
 }
 
+function getDetails($url) {
+	
+	$parser = new DomDocumentParser($url);
+
+	$titleArray = $parser->getTitleTags();
+
+	if(sizeof($titleArray) == 0 || $titleArray->item(0)->nodeValue == NULL)
+		return;
+
+	$title = $titleArray->item(0)->nodeValue;
+	$title = str_replace("\n", "", $title);
+
+	if($title == "")
+		return;
+
+	$description = "";
+	$keywords = "";
+
+	$metaArray = $parser->getMetaTags();
+
+	foreach($metaArray as $meta) {
+
+		if($meta->getAttribute("name") == "description") {
+			$description = $meta->getAttribute("content");
+		}
+
+		if($meta->getAttribute("name") == "keywords") {
+			$keywords = $meta->getAttribute("content");
+		}
+
+	}
+
+	$description = str_replace("\n", "", $description);
+	$keywords = str_replace("\n", "", $keywords);
+
+}
+
 function followLinks($url) {
 
 	global $alreadyCrawled;
@@ -49,12 +86,15 @@ function followLinks($url) {
 
 		$href = createLink($href, $url);
 
-		if(!in_array($alreadyCrawled)) {
+		if(!in_array($href, $alreadyCrawled)) {
 			$alreadyCrawled[] = $href;
 			$crawling[] = $href;
 
 			// Insert $href to DB
+			getDetails($href);
 		}
+		else
+			return;
 
 		echo $href . "<br>";
 	}
