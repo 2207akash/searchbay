@@ -32,8 +32,23 @@ class SiteResultsProvider {
 		$resultsHTML = "<div class='siteResults'>";
 
 		while($row = $q->fetch(PDO::FETCH_ASSOC)) {
+			$id = $row["id"];
+			$url = $row["url"];
 			$title = $row["title"];
-			$resultsHTML .= "$title <br>";
+			$description = $row["description"];
+
+			$resultsHTML .= "<div class='resultsContainer'>
+
+								<h3 class='title'>
+									<a class='result' href='$url'>
+										$title
+									</a>
+								</h3>
+
+								<span class='url'>$url</span>
+								<span class='description'>$description</span>
+
+							</div>";
 		}
 
 		$resultsHTML .= "</div>";
