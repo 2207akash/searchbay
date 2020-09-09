@@ -23,9 +23,13 @@ class SiteResultsProvider {
 
 	public function getResultsHTML($page, $pageSize, $query) {
 
-		$q = $this->con->prepare("SELECT * FROM sites WHERE title LIKE :query OR url LIKE :query OR keywords LIKE :query OR description LIKE :query ORDER BY clicks DESC");
+		$fromLimit = ($page-1) * $pageSize;
+
+		$q = $this->con->prepare("SELECT * FROM sites WHERE title LIKE :query OR url LIKE :query OR keywords LIKE :query OR description LIKE :query ORDER BY clicks DESC LIMIT :fromLimit, :pageSize");
 
 		$searchTerm = "%" . $query . "%";
+		$q->bindParam(":fromLimit", $fromLimit, PDO::PARAM_INT);
+		$q->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
 		$q->bindParam(":query", $searchTerm);
 		$q->execute();
 

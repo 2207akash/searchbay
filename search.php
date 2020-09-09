@@ -10,6 +10,7 @@
 	}
 
 	$type = isset($_GET["type"]) ? $_GET["type"] : "web";
+	$page = isset($_GET["page"]) ? $_GET["page"] : 1;
 ?>
 
 <!DOCTYPE html>
@@ -68,12 +69,46 @@
 			<?php 
 
 				$resultsProvider = new siteResultsProvider($con);
+				$pageLimit = 20;
 				$numResults = $resultsProvider->getNumResults($query);
 
 				echo "<p class='resultsCount'>$numResults results found</p>";
 
-				echo $resultsProvider->getResultsHTML(1, 20, $query);
+				echo $resultsProvider->getResultsHTML($page, $pageLimit, $query);
 			?>
+		</div>
+
+		<div class="paginationContainer">
+			
+			<div class="pageButtons">
+				
+				<div class="pageNumberContainer">
+					<img src="assets/images/pageStart.png">
+				</div>
+
+				<?php 
+
+					$currentPage = 1;
+					$pagesLeft = 10;
+
+					while($pagesLeft != 0) {
+						echo "<div class='pageNumberContainer'>
+								<img src='assets/images/page.png'>
+								<span class='pageNumber'>$currentPage</span>
+							</div>";
+
+						$currentPage++;
+						$pagesLeft--;
+					}
+
+				?>
+
+				<div class="pageNumberContainer">
+					<img src="assets/images/pageEnd.png">
+				</div>
+
+			</div>
+
 		</div>
 
 	</div>
