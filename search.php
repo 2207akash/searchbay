@@ -69,12 +69,12 @@
 			<?php 
 
 				$resultsProvider = new siteResultsProvider($con);
-				$pageLimit = 20;
+				$pageSize = 20;
 				$numResults = $resultsProvider->getNumResults($query);
 
 				echo "<p class='resultsCount'>$numResults results found</p>";
 
-				echo $resultsProvider->getResultsHTML($page, $pageLimit, $query);
+				echo $resultsProvider->getResultsHTML($page, $pageSize, $query);
 			?>
 		</div>
 
@@ -88,14 +88,35 @@
 
 				<?php 
 
-					$currentPage = 1;
-					$pagesLeft = 10;
+					$pagesToShow = 10;
+					$numPages = ceil($numResults / $pageSize);
+					$pagesLeft = min($pagesToShow, $numPages);
 
-					while($pagesLeft != 0) {
-						echo "<div class='pageNumberContainer'>
-								<img src='assets/images/page.png'>
+					$currentPage = $page - floor($pagesToShow/2);
+					if($currentPage < 1) {
+						$currentPage = 1;
+					}
+
+					if($currentPage + $pagesLeft > $numPages + 1) {
+						$currentPage = $numPages + 1 - $pagesLeft;
+					}
+
+					while($pagesLeft != 0 && $currentPage <= $numPages) {
+
+						if($currentPage == $page) {
+							echo "<div class='pageNumberContainer'>
+								<img src='assets/images/pageSelected.png'>
 								<span class='pageNumber'>$currentPage</span>
 							</div>";
+						}
+						else {
+							echo "<div class='pageNumberContainer'>
+								<a href='search.php?query=$query&type=$type&page=$currentPage'>
+									<img src='assets/images/page.png'>
+									<span class='pageNumber'>$currentPage</span>
+								</a>
+							</div>";
+						}
 
 						$currentPage++;
 						$pagesLeft--;
